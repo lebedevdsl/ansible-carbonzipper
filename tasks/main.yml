@@ -1,0 +1,32 @@
+---
+# tasks file for lebedevdsl.carbonzipper
+- name: "Install package"
+  package:
+    name: "{{ carbonzipper_package }}"
+    state: present
+
+- name: "Provide configuration"
+  template:
+    src: "templates/carbonzipper.conf.j2"
+    dest: "{{ carbonzipper_config }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: "Provide systemd configuration"
+  template:
+    src: "templates/carbonzipper.service.j2"
+    dest: "/usr/lib/systemd/system/carbonzipper.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify: "reload systemd"
+
+- name: "Reload systemd"
+  meta: flush_handlers
+
+- name: "Start service"
+  service:
+    name: carbonzipper
+    state: started
+    enabled: true

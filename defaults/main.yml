@@ -1,0 +1,23 @@
+---
+# defaults file for lebedevdsl.carbonzipper
+carbonzipper_package: carbonzipper
+carbonzipper_config: "/etc/carbonzipper/carbonzipper.conf"
+
+carbonzipper_listen: 'localhost:8088'
+carbonzipper_max_procs: 0
+carbonzipper_graphite_interval: '60s'
+carbonzipper_graphite_prefix: 'carbon.zipper'
+carbonzipper_buckets: 10
+carbonzipper_timeouts_global: "10s"
+carbonzipper_timeouts_after_started: "2s"
+carbonzipper_concurrency_limit: 0
+carbonzipper_max_idle_conns_per_host: 100
+carbonzipper_expire_delay_sec: 10
+carbonzipper_graphite_09_compat: 'false'
+carbonzipper_backends:
+  - "http://localhost:8083"
+carbonzipper_logger:
+  - logger: ""
+    file: /var/log/carbonzipper/carbonzipper.log
+    level: "error"
+    encoding: "json"

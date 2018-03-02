@@ -1,0 +1,38 @@
+listen: "{{ carbonzipper_listen | default('localhost:8088') }}"
+maxProcs: {{ carbonzipper_max_procs | default(0) }}
+graphite:
+    host: "{{ carbonzipper_graphite_host | default('localhost:2003') }}"
+    interval: "{{ carbonzipper_graphite_interval | default('60s') }}"
+    prefix: "{{ carbonzipper_graphite_prefix | default('carbon.zipper') }}"
+# Number of 100ms buckets to track request distribution in. Used to build
+# 'carbon.zipper.hostname.requests_in_0ms_to_100ms' metric and friends.
+# Requests beyond the last bucket are logged as slow
+# (default of 10 implies "slow" is >1 second).
+buckets: {{ carbonzipper_buckets | default(10) }}
+
+timeouts:
+    # Maximum total backend requesting timeout in ms.
+    # ( How long we may spend making requests. )
+    global: "{{ carbonzipper_timeouts_global | default("10s") }}"
+    # Timeout, in ms, once the final backend has been contacted.
+    # ( [Effectively] How long we'll wait for the slowest response. )
+    afterStarted: "{{ carbonzipper_timeouts_after_started | default("2s") }}"
+
+# Number of concurrent requests to any given backend - default is no limit.
+# If set, you likely want >= MaxIdleConnsPerHost
+concurrencyLimit: {{ carbonzipper_concurrency_limit | default(0) }}
+
+# Control http.MaxIdleConnsPerHost. Large values can lead to more idle
+# connections on the backend servers which may bump into limits; tune with care.
+maxIdleConnsPerHost: {{ carbonzipper_max_idle_conns_per_host | default(100) }}
+
+# If not zero, enabled cache for find requests
+# This parameter controls when it will expire (in seconds)
+# Default: 600 (10 minutes)
+expireDelaySec: {{ carbonzipper_expire_delay_sec | default(10) }}
+
+# "http://host:port" array of instances of carbonserver stores
+# This is the *ONLY* config element that MUST be specified.
+backends: {{ carbonzipper_backends }}
+graphite09compat: {{ carbonzipper_graphite_09_compat | default('false') }}
+logger: {{ carbonzipper_logger }}
